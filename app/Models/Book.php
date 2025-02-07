@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use app\Enums\EReturnPolicy;
-use Illuminate\Database\Eloquent\Model;
 
 class Book extends BaseModel
 {
