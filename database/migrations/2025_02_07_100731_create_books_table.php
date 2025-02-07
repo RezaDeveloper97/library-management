@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('title', 128);
             $table->foreignId('author_id')->constrained('authors')->onDelete('cascade');
             $table->boolean('is_vip_only')->default(false);
-            $table->tinyInteger('return_policy')->default(EReturnPolicy::AnyBranch);
+            $table->unsignedTinyInteger('return_policy')->default(EReturnPolicy::AnyBranch);
             $table->timestamps();
         });
     }
