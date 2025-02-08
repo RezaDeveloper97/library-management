@@ -8,9 +8,9 @@ class PublisherRepository
 {
     protected $query;
 
-    public function __construct(PublisherQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new PublisherQuery();
     }
 
     public function find($id)

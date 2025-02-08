@@ -8,9 +8,9 @@ class ScoreLogRepository
 {
     protected $query;
 
-    public function __construct(ScoreLogQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new ScoreLogQuery();
     }
 
     public function find($id)

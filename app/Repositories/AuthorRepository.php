@@ -8,9 +8,9 @@ class AuthorRepository
 {
     protected $query;
 
-    public function __construct(AuthorQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new AuthorQuery();
     }
 
     public function find($id)

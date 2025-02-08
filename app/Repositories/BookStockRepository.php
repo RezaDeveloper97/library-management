@@ -8,9 +8,9 @@ class BookStockRepository
 {
     protected $query;
 
-    public function __construct(BookStockQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new BookStockQuery();
     }
 
     public function find($id)

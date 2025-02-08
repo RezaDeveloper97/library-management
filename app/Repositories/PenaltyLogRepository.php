@@ -8,9 +8,9 @@ class PenaltyLogRepository
 {
     protected $query;
 
-    public function __construct(PenaltyLogQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new PenaltyLogQuery();
     }
 
     public function find($id)

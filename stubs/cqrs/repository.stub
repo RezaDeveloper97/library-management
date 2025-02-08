@@ -8,9 +8,9 @@ class {{ name }}Repository
 {
     protected $query;
 
-    public function __construct({{ name }}Query $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new {{ name }}Query();
     }
 
     public function find($id)

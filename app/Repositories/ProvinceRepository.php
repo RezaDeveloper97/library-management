@@ -8,9 +8,9 @@ class ProvinceRepository
 {
     protected $query;
 
-    public function __construct(ProvinceQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new ProvinceQuery();
     }
 
     public function find($id)

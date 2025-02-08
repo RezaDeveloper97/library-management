@@ -8,9 +8,9 @@ class SystemRuleRepository
 {
     protected $query;
 
-    public function __construct(SystemRuleQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new SystemRuleQuery();
     }
 
     public function find($id)

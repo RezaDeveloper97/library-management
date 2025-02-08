@@ -8,9 +8,9 @@ class BookWaitlistRepository
 {
     protected $query;
 
-    public function __construct(BookWaitlistQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new BookWaitlistQuery();
     }
 
     public function find($id)

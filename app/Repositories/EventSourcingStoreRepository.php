@@ -8,9 +8,9 @@ class EventSourcingStoreRepository
 {
     protected $query;
 
-    public function __construct(EventSourcingStoreQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new EventSourcingStoreQuery();
     }
 
     public function find($id)

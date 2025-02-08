@@ -8,9 +8,9 @@ class ReservationRepository
 {
     protected $query;
 
-    public function __construct(ReservationQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new ReservationQuery();
     }
 
     public function find($id)

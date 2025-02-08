@@ -8,9 +8,9 @@ class BranchRepository
 {
     protected $query;
 
-    public function __construct(BranchQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new BranchQuery();
     }
 
     public function find($id)

@@ -8,9 +8,9 @@ class UserRepository
 {
     protected $query;
 
-    public function __construct(UserQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new UserQuery();
     }
 
     public function find($id)

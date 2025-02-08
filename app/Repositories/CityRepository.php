@@ -8,9 +8,9 @@ class CityRepository
 {
     protected $query;
 
-    public function __construct(CityQuery $query)
+    public function __construct()
     {
-        $this->query = $query;
+        $this->query = new CityQuery();
     }
 
     public function find($id)
