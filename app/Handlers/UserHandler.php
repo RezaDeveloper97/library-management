@@ -2,50 +2,59 @@
 
 namespace App\Handlers;
 
-use App\Commands\UserCommand;
 use App\Models\User;
+use App\DTOs\UserDTO;
 
-class UserHandler
+class UserHandler extends BasicHandler
 {
-    public function create(UserCommand $command)
+    public function create(UserDTO $dto)
     {
-        return User::create([
-            'name' => $command->name,
-            'email' => $command->email,
-            'password' => $command->password,
-            'is_vip' => $command->is_vip,
-            'score' => $command->score
+        $model = User::query()->create([
+            'name' => $dto->name,
+            'email' => $dto->email,
+            'password' => $dto->password,
+            'is_vip' => $dto->is_vip,
+            'score' => $dto->score
         ]);
-    }
 
-    public function update(UserCommand $command)
-    {
-        $model = User::findOrFail($command->id);
-
-        if (!is_null($command->name)) {
-            $model->name = $command->name;
-        }
-        if (!is_null($command->email)) {
-            $model->email = $command->email;
-        }
-        if (!is_null($command->password)) {
-            $model->password = $command->password;
-        }
-        if (!is_null($command->is_vip)) {
-            $model->is_vip = $command->is_vip;
-        }
-        if (!is_null($command->score)) {
-            $model->score = $command->score;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(UserCommand $command)
+    public function update(UserDTO $dto)
     {
-        $model = User::findOrFail($command->id);
+        $model = User::query()->find($dto->id);
+
+        if (!is_null($dto->name)) {
+            $model->name = $dto->name;
+        }
+        if (!is_null($dto->email)) {
+            $model->email = $dto->email;
+        }
+        if (!is_null($dto->password)) {
+            $model->password = $dto->password;
+        }
+        if (!is_null($dto->is_vip)) {
+            $model->is_vip = $dto->is_vip;
+        }
+        if (!is_null($dto->score)) {
+            $model->score = $dto->score;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(UserDTO $dto)
+    {
+        $model = User::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

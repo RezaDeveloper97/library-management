@@ -2,50 +2,59 @@
 
 namespace App\Handlers;
 
-use App\Commands\BookStockCommand;
 use App\Models\BookStock;
+use App\DTOs\BookStockDTO;
 
-class BookStockHandler
+class BookStockHandler extends BasicHandler
 {
-    public function create(BookStockCommand $command)
+    public function create(BookStockDTO $dto)
     {
-        return BookStock::create([
-            'book_id' => $command->book_id,
-            'edition_id' => $command->edition_id,
-            'branch_id' => $command->branch_id,
-            'total_copies' => $command->total_copies,
-            'reserved_copies' => $command->reserved_copies
+        $model = BookStock::query()->create([
+            'book_id' => $dto->book_id,
+            'edition_id' => $dto->edition_id,
+            'branch_id' => $dto->branch_id,
+            'total_copies' => $dto->total_copies,
+            'reserved_copies' => $dto->reserved_copies
         ]);
-    }
 
-    public function update(BookStockCommand $command)
-    {
-        $model = BookStock::findOrFail($command->id);
-
-        if (!is_null($command->book_id)) {
-            $model->book_id = $command->book_id;
-        }
-        if (!is_null($command->edition_id)) {
-            $model->edition_id = $command->edition_id;
-        }
-        if (!is_null($command->branch_id)) {
-            $model->branch_id = $command->branch_id;
-        }
-        if (!is_null($command->total_copies)) {
-            $model->total_copies = $command->total_copies;
-        }
-        if (!is_null($command->reserved_copies)) {
-            $model->reserved_copies = $command->reserved_copies;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(BookStockCommand $command)
+    public function update(BookStockDTO $dto)
     {
-        $model = BookStock::findOrFail($command->id);
+        $model = BookStock::query()->find($dto->id);
+
+        if (!is_null($dto->book_id)) {
+            $model->book_id = $dto->book_id;
+        }
+        if (!is_null($dto->edition_id)) {
+            $model->edition_id = $dto->edition_id;
+        }
+        if (!is_null($dto->branch_id)) {
+            $model->branch_id = $dto->branch_id;
+        }
+        if (!is_null($dto->total_copies)) {
+            $model->total_copies = $dto->total_copies;
+        }
+        if (!is_null($dto->reserved_copies)) {
+            $model->reserved_copies = $dto->reserved_copies;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(BookStockDTO $dto)
+    {
+        $model = BookStock::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

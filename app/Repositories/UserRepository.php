@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\UserQuery;
 
-class UserRepository
+class UserRepository extends BasicRepository
 {
     protected $query;
 

@@ -2,42 +2,51 @@
 
 namespace App\Handlers;
 
-use App\Commands\BookEditionCommand;
 use App\Models\BookEdition;
+use App\DTOs\BookEditionDTO;
 
-class BookEditionHandler
+class BookEditionHandler extends BasicHandler
 {
-    public function create(BookEditionCommand $command)
+    public function create(BookEditionDTO $dto)
     {
-        return BookEdition::create([
-            'book_id' => $command->book_id,
-            'publisher_id' => $command->publisher_id,
-            'edition_year' => $command->edition_year
+        $model = BookEdition::query()->create([
+            'book_id' => $dto->book_id,
+            'publisher_id' => $dto->publisher_id,
+            'edition_year' => $dto->edition_year
         ]);
-    }
 
-    public function update(BookEditionCommand $command)
-    {
-        $model = BookEdition::findOrFail($command->id);
-
-        if (!is_null($command->book_id)) {
-            $model->book_id = $command->book_id;
-        }
-        if (!is_null($command->publisher_id)) {
-            $model->publisher_id = $command->publisher_id;
-        }
-        if (!is_null($command->edition_year)) {
-            $model->edition_year = $command->edition_year;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(BookEditionCommand $command)
+    public function update(BookEditionDTO $dto)
     {
-        $model = BookEdition::findOrFail($command->id);
+        $model = BookEdition::query()->find($dto->id);
+
+        if (!is_null($dto->book_id)) {
+            $model->book_id = $dto->book_id;
+        }
+        if (!is_null($dto->publisher_id)) {
+            $model->publisher_id = $dto->publisher_id;
+        }
+        if (!is_null($dto->edition_year)) {
+            $model->edition_year = $dto->edition_year;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(BookEditionDTO $dto)
+    {
+        $model = BookEdition::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

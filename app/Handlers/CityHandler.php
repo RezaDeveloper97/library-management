@@ -2,38 +2,47 @@
 
 namespace App\Handlers;
 
-use App\Commands\CityCommand;
 use App\Models\City;
+use App\DTOs\CityDTO;
 
-class CityHandler
+class CityHandler extends BasicHandler
 {
-    public function create(CityCommand $command)
+    public function create(CityDTO $dto)
     {
-        return City::create([
-            'province_id' => $command->province_id,
-            'name' => $command->name
+        $model = City::query()->create([
+            'province_id' => $dto->province_id,
+            'name' => $dto->name
         ]);
-    }
 
-    public function update(CityCommand $command)
-    {
-        $model = City::findOrFail($command->id);
-
-        if (!is_null($command->province_id)) {
-            $model->province_id = $command->province_id;
-        }
-        if (!is_null($command->name)) {
-            $model->name = $command->name;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(CityCommand $command)
+    public function update(CityDTO $dto)
     {
-        $model = City::findOrFail($command->id);
+        $model = City::query()->find($dto->id);
+
+        if (!is_null($dto->province_id)) {
+            $model->province_id = $dto->province_id;
+        }
+        if (!is_null($dto->name)) {
+            $model->name = $dto->name;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(CityDTO $dto)
+    {
+        $model = City::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

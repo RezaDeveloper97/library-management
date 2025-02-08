@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\AuthorQuery;
 
-class AuthorRepository
+class AuthorRepository extends BasicRepository
 {
     protected $query;
 

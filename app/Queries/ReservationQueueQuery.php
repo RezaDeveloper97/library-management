@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\ReservationQueue;
 
-class ReservationQueueQuery
+class ReservationQueueQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return ReservationQueue::find($id);
+        $model = ReservationQueue::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\Publisher;
 
-class PublisherQuery
+class PublisherQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return Publisher::find($id);
+        $model = Publisher::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

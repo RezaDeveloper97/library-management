@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\EventSourcingStore;
 
-class EventSourcingStoreQuery
+class EventSourcingStoreQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return EventSourcingStore::find($id);
+        $model = EventSourcingStore::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

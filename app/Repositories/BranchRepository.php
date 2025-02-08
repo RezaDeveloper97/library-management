@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\BranchQuery;
 
-class BranchRepository
+class BranchRepository extends BasicRepository
 {
     protected $query;
 

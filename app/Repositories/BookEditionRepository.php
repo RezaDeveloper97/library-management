@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\BookEditionQuery;
 
-class BookEditionRepository
+class BookEditionRepository extends BasicRepository
 {
     protected $query;
 

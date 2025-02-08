@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\ScoreLogQuery;
 
-class ScoreLogRepository
+class ScoreLogRepository extends BasicRepository
 {
     protected $query;
 

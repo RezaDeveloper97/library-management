@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\EventSourcingStoreQuery;
 
-class EventSourcingStoreRepository
+class EventSourcingStoreRepository extends BasicRepository
 {
     protected $query;
 

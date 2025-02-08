@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\SystemRule;
 
-class SystemRuleQuery
+class SystemRuleQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return SystemRule::find($id);
+        $model = SystemRule::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

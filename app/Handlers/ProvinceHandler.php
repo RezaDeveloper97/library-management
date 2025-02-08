@@ -2,34 +2,43 @@
 
 namespace App\Handlers;
 
-use App\Commands\ProvinceCommand;
 use App\Models\Province;
+use App\DTOs\ProvinceDTO;
 
-class ProvinceHandler
+class ProvinceHandler extends BasicHandler
 {
-    public function create(ProvinceCommand $command)
+    public function create(ProvinceDTO $dto)
     {
-        return Province::create([
-            'name' => $command->name
+        $model = Province::query()->create([
+            'name' => $dto->name
         ]);
-    }
 
-    public function update(ProvinceCommand $command)
-    {
-        $model = Province::findOrFail($command->id);
-
-        if (!is_null($command->name)) {
-            $model->name = $command->name;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(ProvinceCommand $command)
+    public function update(ProvinceDTO $dto)
     {
-        $model = Province::findOrFail($command->id);
+        $model = Province::query()->find($dto->id);
+
+        if (!is_null($dto->name)) {
+            $model->name = $dto->name;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(ProvinceDTO $dto)
+    {
+        $model = Province::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

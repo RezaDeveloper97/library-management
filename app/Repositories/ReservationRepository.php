@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\ReservationQuery;
 
-class ReservationRepository
+class ReservationRepository extends BasicRepository
 {
     protected $query;
 

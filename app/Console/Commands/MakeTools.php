@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 class MakeTools extends Command
 {
     protected $signature = 'make:tools {name}';
-    protected $description = 'Generate CQRS structure for a given model (DTO, Handler, Query, Repository, Service)';
+    protected $description = 'Generate structures for a given model (DTO, Handler, Query, Repository, Service)';
 
     public function handle()
     {
@@ -33,14 +33,14 @@ class MakeTools extends Command
             $this->createFile($folder, $stub, $name, $fillable);
         }
 
-        $this->info("CQRS structure for '{$name}' created successfully.");
+        $this->info("Tools structure for '{$name}' created successfully.");
     }
 
     protected function createFile($folder, $stub, $name, $fillable = [])
     {
         $filePath = app_path("{$folder}/{$name}{$stub}.php");
         $stubFileName = strtolower($stub);
-        $stubPath = base_path("stubs/cqrs/{$stubFileName}.stub");
+        $stubPath = base_path("stubs/tools/{$stubFileName}.stub");
 
         if (!File::exists($stubPath)) {
             $this->error("Stub not found: {$stubPath}");

@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\ScoreLog;
 
-class ScoreLogQuery
+class ScoreLogQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return ScoreLog::find($id);
+        $model = ScoreLog::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

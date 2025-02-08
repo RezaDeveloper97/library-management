@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\Author;
 
-class AuthorQuery
+class AuthorQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return Author::find($id);
+        $model = Author::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

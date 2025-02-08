@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\Branch;
 
-class BranchQuery
+class BranchQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return Branch::find($id);
+        $model = Branch::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

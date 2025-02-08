@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\BookWaitlistQuery;
 
-class BookWaitlistRepository
+class BookWaitlistRepository extends BasicRepository
 {
     protected $query;
 

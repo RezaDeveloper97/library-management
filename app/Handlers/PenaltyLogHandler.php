@@ -2,46 +2,55 @@
 
 namespace App\Handlers;
 
-use App\Commands\PenaltyLogCommand;
 use App\Models\PenaltyLog;
+use App\DTOs\PenaltyLogDTO;
 
-class PenaltyLogHandler
+class PenaltyLogHandler extends BasicHandler
 {
-    public function create(PenaltyLogCommand $command)
+    public function create(PenaltyLogDTO $dto)
     {
-        return PenaltyLog::create([
-            'user_id' => $command->user_id,
-            'reservation_id' => $command->reservation_id,
-            'penalty_reason' => $command->penalty_reason,
-            'penalty_amount' => $command->penalty_amount
+        $model = PenaltyLog::query()->create([
+            'user_id' => $dto->user_id,
+            'reservation_id' => $dto->reservation_id,
+            'penalty_reason' => $dto->penalty_reason,
+            'penalty_amount' => $dto->penalty_amount
         ]);
-    }
 
-    public function update(PenaltyLogCommand $command)
-    {
-        $model = PenaltyLog::findOrFail($command->id);
-
-        if (!is_null($command->user_id)) {
-            $model->user_id = $command->user_id;
-        }
-        if (!is_null($command->reservation_id)) {
-            $model->reservation_id = $command->reservation_id;
-        }
-        if (!is_null($command->penalty_reason)) {
-            $model->penalty_reason = $command->penalty_reason;
-        }
-        if (!is_null($command->penalty_amount)) {
-            $model->penalty_amount = $command->penalty_amount;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(PenaltyLogCommand $command)
+    public function update(PenaltyLogDTO $dto)
     {
-        $model = PenaltyLog::findOrFail($command->id);
+        $model = PenaltyLog::query()->find($dto->id);
+
+        if (!is_null($dto->user_id)) {
+            $model->user_id = $dto->user_id;
+        }
+        if (!is_null($dto->reservation_id)) {
+            $model->reservation_id = $dto->reservation_id;
+        }
+        if (!is_null($dto->penalty_reason)) {
+            $model->penalty_reason = $dto->penalty_reason;
+        }
+        if (!is_null($dto->penalty_amount)) {
+            $model->penalty_amount = $dto->penalty_amount;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(PenaltyLogDTO $dto)
+    {
+        $model = PenaltyLog::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

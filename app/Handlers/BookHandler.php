@@ -2,46 +2,55 @@
 
 namespace App\Handlers;
 
-use App\Commands\BookCommand;
 use App\Models\Book;
+use App\DTOs\BookDTO;
 
-class BookHandler
+class BookHandler extends BasicHandler
 {
-    public function create(BookCommand $command)
+    public function create(BookDTO $dto)
     {
-        return Book::create([
-            'title' => $command->title,
-            'author_id' => $command->author_id,
-            'is_vip_only' => $command->is_vip_only,
-            'return_policy' => $command->return_policy
+        $model = Book::query()->create([
+            'title' => $dto->title,
+            'author_id' => $dto->author_id,
+            'is_vip_only' => $dto->is_vip_only,
+            'return_policy' => $dto->return_policy
         ]);
-    }
 
-    public function update(BookCommand $command)
-    {
-        $model = Book::findOrFail($command->id);
-
-        if (!is_null($command->title)) {
-            $model->title = $command->title;
-        }
-        if (!is_null($command->author_id)) {
-            $model->author_id = $command->author_id;
-        }
-        if (!is_null($command->is_vip_only)) {
-            $model->is_vip_only = $command->is_vip_only;
-        }
-        if (!is_null($command->return_policy)) {
-            $model->return_policy = $command->return_policy;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(BookCommand $command)
+    public function update(BookDTO $dto)
     {
-        $model = Book::findOrFail($command->id);
+        $model = Book::query()->find($dto->id);
+
+        if (!is_null($dto->title)) {
+            $model->title = $dto->title;
+        }
+        if (!is_null($dto->author_id)) {
+            $model->author_id = $dto->author_id;
+        }
+        if (!is_null($dto->is_vip_only)) {
+            $model->is_vip_only = $dto->is_vip_only;
+        }
+        if (!is_null($dto->return_policy)) {
+            $model->return_policy = $dto->return_policy;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(BookDTO $dto)
+    {
+        $model = Book::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

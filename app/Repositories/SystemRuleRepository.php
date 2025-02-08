@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\SystemRuleQuery;
 
-class SystemRuleRepository
+class SystemRuleRepository extends BasicRepository
 {
     protected $query;
 

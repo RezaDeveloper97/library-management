@@ -2,34 +2,43 @@
 
 namespace App\Handlers;
 
-use App\Commands\AuthorCommand;
 use App\Models\Author;
+use App\DTOs\AuthorDTO;
 
-class AuthorHandler
+class AuthorHandler extends BasicHandler
 {
-    public function create(AuthorCommand $command)
+    public function create(AuthorDTO $dto)
     {
-        return Author::create([
-            'name' => $command->name
+        $model = Author::query()->create([
+            'name' => $dto->name
         ]);
-    }
 
-    public function update(AuthorCommand $command)
-    {
-        $model = Author::findOrFail($command->id);
-
-        if (!is_null($command->name)) {
-            $model->name = $command->name;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(AuthorCommand $command)
+    public function update(AuthorDTO $dto)
     {
-        $model = Author::findOrFail($command->id);
+        $model = Author::query()->find($dto->id);
+
+        if (!is_null($dto->name)) {
+            $model->name = $dto->name;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(AuthorDTO $dto)
+    {
+        $model = Author::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;

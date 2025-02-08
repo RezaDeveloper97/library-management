@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\Book;
 
-class BookQuery
+class BookQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return Book::find($id);
+        $model = Book::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

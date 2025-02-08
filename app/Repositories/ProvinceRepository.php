@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\ProvinceQuery;
 
-class ProvinceRepository
+class ProvinceRepository extends BasicRepository
 {
     protected $query;
 

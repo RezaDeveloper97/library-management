@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\PenaltyLogQuery;
 
-class PenaltyLogRepository
+class PenaltyLogRepository extends BasicRepository
 {
     protected $query;
 

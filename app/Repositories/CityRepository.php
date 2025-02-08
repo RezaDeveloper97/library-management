@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Queries\CityQuery;
 
-class CityRepository
+class CityRepository extends BasicRepository
 {
     protected $query;
 

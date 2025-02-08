@@ -4,11 +4,19 @@ namespace App\Queries;
 
 use App\Models\BookWaitlist;
 
-class BookWaitlistQuery
+class BookWaitlistQuery extends BasicQuery
 {
     public function findById($id)
     {
-        return BookWaitlist::find($id);
+        $model = BookWaitlist::query()->find($id);
+
+        $cachedData = $model->getCacheData();
+
+        if ($cachedData) return $cachedData;
+
+        $model->setCacheData();
+
+        return $model;
     }
 
     public function getAll()

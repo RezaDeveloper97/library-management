@@ -2,54 +2,63 @@
 
 namespace App\Handlers;
 
-use App\Commands\BranchCommand;
 use App\Models\Branch;
+use App\DTOs\BranchDTO;
 
-class BranchHandler
+class BranchHandler extends BasicHandler
 {
-    public function create(BranchCommand $command)
+    public function create(BranchDTO $dto)
     {
-        return Branch::create([
-            'city_id' => $command->city_id,
-            'name' => $command->name,
-            'address' => $command->address,
-            'postal_code' => $command->postal_code,
-            'latitude' => $command->latitude,
-            'longitude' => $command->longitude
+        $model = Branch::query()->create([
+            'city_id' => $dto->city_id,
+            'name' => $dto->name,
+            'address' => $dto->address,
+            'postal_code' => $dto->postal_code,
+            'latitude' => $dto->latitude,
+            'longitude' => $dto->longitude
         ]);
-    }
 
-    public function update(BranchCommand $command)
-    {
-        $model = Branch::findOrFail($command->id);
-
-        if (!is_null($command->city_id)) {
-            $model->city_id = $command->city_id;
-        }
-        if (!is_null($command->name)) {
-            $model->name = $command->name;
-        }
-        if (!is_null($command->address)) {
-            $model->address = $command->address;
-        }
-        if (!is_null($command->postal_code)) {
-            $model->postal_code = $command->postal_code;
-        }
-        if (!is_null($command->latitude)) {
-            $model->latitude = $command->latitude;
-        }
-        if (!is_null($command->longitude)) {
-            $model->longitude = $command->longitude;
-        }
-
-        $model->save();
+        $model->setCacheData();
 
         return $model;
     }
 
-    public function delete(BranchCommand $command)
+    public function update(BranchDTO $dto)
     {
-        $model = Branch::findOrFail($command->id);
+        $model = Branch::query()->find($dto->id);
+
+        if (!is_null($dto->city_id)) {
+            $model->city_id = $dto->city_id;
+        }
+        if (!is_null($dto->name)) {
+            $model->name = $dto->name;
+        }
+        if (!is_null($dto->address)) {
+            $model->address = $dto->address;
+        }
+        if (!is_null($dto->postal_code)) {
+            $model->postal_code = $dto->postal_code;
+        }
+        if (!is_null($dto->latitude)) {
+            $model->latitude = $dto->latitude;
+        }
+        if (!is_null($dto->longitude)) {
+            $model->longitude = $dto->longitude;
+        }
+
+        $model->save();
+
+        $model->setCacheData();
+
+        return $model;
+    }
+
+    public function delete(BranchDTO $dto)
+    {
+        $model = Branch::query()->find($dto->id);
+
+        $model->clearCache();
+
         $model->delete();
 
         return $model;
