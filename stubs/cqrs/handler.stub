@@ -7,22 +7,5 @@ use App\Models\{{ name }};
 
 class {{ name }}Handler
 {
-    public function create({{ name }}Command $command)
-    {
-        return {{ name }}::create($command->data);
-    }
-
-    public function update({{ name }}Command $command)
-    {
-        $model = {{ name }}::findOrFail($command->id);
-        $model->update($command->data);
-        return $model;
-    }
-
-    public function delete({{ name }}Command $command)
-    {
-        $model = {{ name }}::findOrFail($command->id);
-        $model->delete();
-        return $model;
-    }
+{{ handler_methods }}
 }

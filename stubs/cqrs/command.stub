@@ -4,18 +4,7 @@ namespace App\Commands;
 
 class {{ name }}Command
 {
-    public static function create($data)
-    {
-        return new self($data);
-    }
+{{ properties }}
 
-    public static function update($data)
-    {
-        return new self($data);
-    }
-
-    public static function delete($id)
-    {
-        return new self($id);
-    }
+{{ methods }}
 }
