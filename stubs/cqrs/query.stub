@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Queries;
+
+use App\Models\{{ name }};
+
+class {{ name }}Query
+{
+    public function findById($id)
+    {
+        return {{ name }}::find($id);
+    }
+
+    public function getAll()
+    {
+        return {{ name }}::all();
+    }
+}

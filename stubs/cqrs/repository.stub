@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Queries\{{ name }}Query;
+
+class {{ name }}Repository
+{
+    protected $query;
+
+    public function __construct({{ name }}Query $query)
+    {
+        $this->query = $query;
+    }
+
+    public function find($id)
+    {
+        return $this->query->findById($id);
+    }
+
+    public function all()
+    {
+        return $this->query->getAll();
+    }
+}
