@@ -15,4 +15,12 @@ class EventSourcingStoreQuery
     {
         return EventSourcingStore::all();
     }
+
+    public function getHistory($modelType, $modelId)
+    {
+        return EventSourcingStore::where('sourceable_type', $modelType)
+            ->where('sourceable_id', $modelId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Traits;
+namespace App\Traits;
 
 use App\Commands\EventSourcingStoreCommand;
 use App\Jobs\EventSourcingStoreJob;
@@ -23,9 +23,6 @@ trait EventSourcingTrait
         });
     }
 
-    /**
-     * Store an event asynchronously using a Job.
-     */
     public function storeEvent($eventType, $eventData = [])
     {
         $command = EventSourcingStoreCommand::create(
@@ -36,5 +33,11 @@ trait EventSourcingTrait
         );
 
         EventSourcingStoreJob::dispatch($command);
+    }
+
+    public function getEventHistory()
+    {
+        $repository = new EventSourcingStoreRepository();
+        return $repository->getHistory(get_class($this), $this->id);
     }
 }

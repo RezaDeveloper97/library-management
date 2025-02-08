@@ -22,4 +22,9 @@ class EventSourcingStoreRepository
     {
         return $this->query->getAll();
     }
+
+    public function getHistory($modelType, $modelId)
+    {
+        return $this->query->getHistory($modelType, $modelId);
+    }
 }
