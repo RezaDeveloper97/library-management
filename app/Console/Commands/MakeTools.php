@@ -4,9 +4,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class MakeCQRS extends Command
+class MakeTools extends Command
 {
-    protected $signature = 'make:cqrs {name}';
+    protected $signature = 'make:tools {name}';
     protected $description = 'Generate CQRS structure for a given model (DTO, Handler, Query, Repository, Service)';
 
     public function handle()
