@@ -4,7 +4,7 @@ namespace App\Queries;
 
 use App\Models\{{ name }};
 
-class {{ name }}Query
+class {{ name }}Query extends BasicQuery
 {
     public function findById($id)
     {

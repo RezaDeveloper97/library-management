@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 class MakeCQRS extends Command
 {
     protected $signature = 'make:cqrs {name}';
-    protected $description = 'Generate CQRS structure for a given model (Command, Handler, Query, Repository)';
+    protected $description = 'Generate CQRS structure for a given model (DTO, Handler, Query, Repository, Service)';
 
     public function handle()
     {
@@ -22,10 +22,11 @@ class MakeCQRS extends Command
         $fillable = $this->getFillableFields($name);
 
         $folders = [
-            'Commands' => 'Command',
+            'DTOs' => 'DTO',
             'Handlers' => 'Handler',
             'Queries' => 'Query',
             'Repositories' => 'Repository',
+            'Services' => 'Service',
         ];
 
         foreach ($folders as $folder => $stub) {
@@ -89,66 +90,75 @@ class MakeCQRS extends Command
     protected function generateMethods($fillable)
     {
         $createParams = implode(', ', array_map(fn($field) => "\$$field", $fillable));
-        $createAssignments = implode("\n        ", array_map(fn($field) => "\$command->$field = \$$field;", $fillable));
+        $createAssignments = implode("\n        ", array_map(fn($field) => "\$dto->$field = \$$field;", $fillable));
 
         $updateParams = implode(', ', array_map(fn($field) => "\$$field = null", $fillable));
-        $updateAssignments = implode("\n        ", array_map(fn($field) => "if (!is_null(\$$field)) {\n            \$command->$field = \$$field;\n        }", $fillable));
+        $updateAssignments = implode("\n        ", array_map(fn($field) => "if (!is_null(\$$field)) {\n            \$dto->$field = \$$field;\n        }", $fillable));
 
         return <<<EOT
     public static function create($createParams)
     {
-        \$command = new self();
+        \$dto = new self();
         $createAssignments
 
-        return \$command;
+        return \$dto;
     }
 
     public static function update(\$id, $updateParams)
     {
-        \$command = new self();
-        \$command->id = \$id;
+        \$dto = new self();
+        \$dto->id = \$id;
         $updateAssignments
 
-        return \$command;
+        return \$dto;
     }
 
     public static function delete(\$id)
     {
-        \$command = new self();
-        \$command->id = \$id;
+        \$dto = new self();
+        \$dto->id = \$id;
 
-        return \$command;
+        return \$dto;
     }
 EOT;
     }
 
     protected function generateHandlerMethods($fillable, $name)
     {
-        $createAssignments = implode(",\n            ", array_map(fn($field) => "'$field' => \$command->$field", $fillable));
-        $updateAssignments = implode("\n        ", array_map(fn($field) => "if (!is_null(\$command->$field)) {\n            \$model->$field = \$command->$field;\n        }", $fillable));
+        $createAssignments = implode(",\n            ", array_map(fn($field) => "'$field' => \$dto->$field", $fillable));
+        $updateAssignments = implode("\n        ", array_map(fn($field) => "if (!is_null(\$dto->$field)) {\n            \$model->$field = \$dto->$field;\n        }", $fillable));
 
         return <<<EOT
-    public function create({$name}Command \$command)
+    public function create({$name}DTO \$dto)
     {
-        return $name::create([
+        \$model = $name::query()->create([
             $createAssignments
         ]);
+
+        \$model->setCacheData();
+
+        return \$model;
     }
 
-    public function update({$name}Command \$command)
+    public function update({$name}DTO \$dto)
     {
-        \$model = $name::findOrFail(\$command->id);
+        \$model = $name::query()->find(\$dto->id);
 
         $updateAssignments
 
         \$model->save();
 
+        \$model->setCacheData();
+
         return \$model;
     }
 
-    public function delete({$name}Command \$command)
+    public function delete({$name}DTO \$dto)
     {
-        \$model = $name::findOrFail(\$command->id);
+        \$model = $name::query()->find(\$dto->id);
+
+        \$model->clearCache();
+
         \$model->delete();
 
         return \$model;

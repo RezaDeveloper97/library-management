@@ -1,0 +1,10 @@
+<?php
+
+namespace App\DTOs;
+
+class {{ name }}DTO extends BasicDTO
+{
+{{ properties }}
+
+{{ methods }}
+}

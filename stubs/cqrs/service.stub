@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Services;
+
+use App\Handlers\{{ name }}Handler;
+use App\DTOs\{{ name }}DTO;
+
+class {{ name }}Service extends BasicService
+{
+    protected $handler;
+
+    public function __construct()
+    {
+        $this->handler = new {{ name }}Handler();
+    }
+
+    public function create({{ name }}DTO $dto)
+    {
+        return $this->handler->create($dto);
+    }
+
+    public function update({{ name }}DTO $dto)
+    {
+        return $this->handler->update($dto);
+    }
+
+    public function delete({{ name }}DTO $dto)
+    {
+        return $this->handler->delete($dto);
+    }
+}

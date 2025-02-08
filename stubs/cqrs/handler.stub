@@ -2,10 +2,10 @@
 
 namespace App\Handlers;
 
-use App\Commands\{{ name }}Command;
 use App\Models\{{ name }};
+use App\DTOs\{{ name }}DTO;
 
-class {{ name }}Handler
+class {{ name }}Handler extends BasicHandler
 {
 {{ handler_methods }}
 }
