@@ -10,13 +10,14 @@ class UserQuery extends BasicQuery
     {
         $model = User::query()->find($id);
 
-        $cachedData = $model->getCacheData();
+        return $this->getModelData($model);
+    }
 
-        if ($cachedData) return $cachedData;
+    public function findByEmail(string $email)
+    {
+        $model = User::query()->where('email', $email)->first();
 
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
     public function getAll()

@@ -7,25 +7,22 @@ use App\DTOs\UserDTO;
 
 class UserService extends BasicService
 {
-    protected $handler;
+    protected UserHandler $handler;
 
     public function __construct()
     {
         $this->handler = new UserHandler();
     }
 
-    public function create(UserDTO $dto)
+    public function create(string $name, string $email, string $password)
     {
-        return $this->handler->create($dto);
-    }
+        $userDto = new UserDTO();
+        $userDto->name = $name;
+        $userDto->email = $email;
+        $userDto->password = $password;
+        $userDto->is_vip = false;
+        $userDto->score = 0;
 
-    public function update(UserDTO $dto)
-    {
-        return $this->handler->update($dto);
-    }
-
-    public function delete(UserDTO $dto)
-    {
-        return $this->handler->delete($dto);
+        return $this->handler->create($userDto);
     }
 }

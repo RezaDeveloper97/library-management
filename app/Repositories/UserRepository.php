@@ -18,6 +18,11 @@ class UserRepository extends BasicRepository
         return $this->query->findById($id);
     }
 
+    public function findByEmail(string $email)
+    {
+        return $this->query->findByEmail($email);
+    }
+
     public function all()
     {
         return $this->query->getAll();
