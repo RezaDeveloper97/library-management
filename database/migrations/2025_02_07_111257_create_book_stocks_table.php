@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('edition_id')->constrained('book_editions')->onDelete('cascade');
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
-            $table->integer('total_copies')->default(1);
-            $table->integer('reserved_copies')->default(0);
+            $table->unsignedInteger('total_copies')->default(1);
+            $table->unsignedInteger('reserved_copies')->default(0);
             $table->timestamps();
         });
     }

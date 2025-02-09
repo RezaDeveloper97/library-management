@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('publisher_id')->constrained('publishers')->onDelete('cascade');
-            $table->timestamp('edition_year');
+            $table->dateTime('edition_year');
             $table->timestamps();
         });
     }
