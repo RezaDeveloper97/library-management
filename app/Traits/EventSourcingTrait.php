@@ -2,37 +2,30 @@
 
 namespace App\Traits;
 
-use App\Commands\EventSourcingStoreCommand;
+use App\DTOs\EventSourcingStoreDTO;
 use App\Jobs\EventSourcingStoreJob;
 use App\Repositories\EventSourcingStoreRepository;
 
 trait EventSourcingTrait
 {
-    public static function bootEventSourcingTrait()
+    public static function bootEventSourcingTrait(): void
     {
-        static::created(function ($model) {
-            $model->storeEvent('Created', $model->getAttributes());
-        });
+        static::created(fn($model) => $model->storeEvent('Created', $model->getAttributes()));
 
-        static::updated(function ($model) {
-            $model->storeEvent('Updated', $model->getChanges());
-        });
+        static::updated(fn($model) => $model->storeEvent('Updated', $model->getChanges()));
 
-        static::deleted(function ($model) {
-            $model->storeEvent('Deleted', $model->getAttributes());
-        });
+        static::deleted(fn($model) => $model->storeEvent('Deleted', $model->getAttributes()));
     }
 
-    public function storeEvent($eventType, $eventData = [])
+    public function storeEvent($eventType, $eventData = []): void
     {
-        $command = EventSourcingStoreCommand::create(
-            $eventType,
-            get_class($this),
-            $this->id,
-            $eventData
-        );
+        $dto = new EventSourcingStoreDTO;
+        $dto->event_type = $eventType;
+        $dto->sourceable_type = get_class($this);
+        $dto->sourceable_id = $this->id;
+        $dto->event_data = $eventData;
 
-        EventSourcingStoreJob::dispatch($command);
+        EventSourcingStoreJob::dispatch($dto);
     }
 
     public function getEventHistory()

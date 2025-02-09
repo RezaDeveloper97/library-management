@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Jobs;
 
-use App\Commands\EventSourcingStoreCommand;
+use App\DTOs\EventSourcingStoreDTO;
 use App\Handlers\EventSourcingStoreHandler;
 use App\Models\EventSourcingStore;
 use Illuminate\Bus\Queueable;
@@ -14,16 +15,16 @@ class EventSourcingStoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected EventSourcingStoreCommand $command;
+    protected EventSourcingStoreDTO $dto;
 
-    public function __construct(EventSourcingStoreCommand $command)
+    public function __construct(EventSourcingStoreDTO $dto)
     {
-        $this->command = $command;
+        $this->dto = $dto;
     }
 
     public function handle()
     {
         $handler = new EventSourcingStoreHandler();
-        $handler->create($this->command);
+        $handler->create($this->dto);
     }
 }
