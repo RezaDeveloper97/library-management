@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\BookStock;
 use App\Queries\BookStockQuery;
 
 class BookStockRepository extends BasicRepository
@@ -13,7 +14,7 @@ class BookStockRepository extends BasicRepository
         $this->query = new BookStockQuery();
     }
 
-    public function find($id)
+    public function findById(int $id): ?BookStock
     {
         return $this->query->findById($id);
     }
@@ -21,5 +22,15 @@ class BookStockRepository extends BasicRepository
     public function all()
     {
         return $this->query->getAll();
+    }
+
+    public function isBookAvailableInStock(int $bookStockId): bool
+    {
+        return $this->query->isBookAvailableInStock($bookStockId);
+    }
+
+    public function getListOfBookInStock(int $perPage = 10, ?array $booksId = null, ?array $editionsId = null, ?array $branchesId = null)
+    {
+        return $this->query->getListOfBookInStock($perPage, $booksId, $editionsId, $branchesId);
     }
 }
