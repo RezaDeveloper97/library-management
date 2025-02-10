@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use app\Enums\EReturnPolicy;
+use App\Traits\EventSourcingTrait;
 
 class Book extends BaseModel
 {
+    use EventSourcingTrait;
     protected $fillable = [
         'title',
         'author_id',

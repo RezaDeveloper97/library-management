@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use app\Enums\EBookWaitlistStatus;
+use App\Traits\EventSourcingTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookWaitlist extends BaseModel
 {
+    use EventSourcingTrait;
     protected $fillable = [
         'user_id',
         'book_id',

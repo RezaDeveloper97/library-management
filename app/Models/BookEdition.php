@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\EventSourcingTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookEdition extends BaseModel
 {
+    use EventSourcingTrait;
     protected $fillable = [
         'book_id',
         'publisher_id',
