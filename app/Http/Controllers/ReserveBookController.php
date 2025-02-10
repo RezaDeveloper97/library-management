@@ -15,17 +15,9 @@ class ReserveBookController extends Controller
      */
     public function newReserveBook(NewReserveBookRequest $request, BookStockRepository $bookStockRepository, ReservationService $reservationService): JsonResponse
     {
-        if (!$bookStockRepository->isBookAvailableInStock(bookStockId: $request->input('book_stock_id'))) {
-            return $this->errorMessage('This Book is not available', 500);
-        }
-
         $bookStock = $bookStockRepository->findById(id: $request->input('book_stock_id'));
         if (!$bookStock) {
             return $this->errorMessage('Book not found', 404);
-        }
-
-        if ($bookStock->reserved_copies >= $bookStock->total_copies) {
-            return $this->errorMessage('Book already reserved, try again', 500);
         }
 
         $isReserveBook = $reservationService->reserveBook(
@@ -37,6 +29,6 @@ class ReserveBookController extends Controller
             return $this->successMessage('successfully reserved');
         }
 
-        return $this->errorMessage('Book already reserved, try again', 500);
+        return $this->successMessage('This book has been added to your reservation queue. Please wait for a notification.');
     }
 }

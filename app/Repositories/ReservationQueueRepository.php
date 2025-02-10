@@ -22,4 +22,9 @@ class ReservationQueueRepository extends BasicRepository
     {
         return $this->query->getAll();
     }
+
+    public function isWaitingStatusByUserId(int $userId): bool
+    {
+        return $this->query->isWaitingStatusByUserId($userId);
+    }
 }

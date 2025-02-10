@@ -2,30 +2,45 @@
 
 namespace App\Services;
 
+use App\Enums\EReservationQueueStatus;
+use App\Exceptions\ErrorJsonException;
 use App\Handlers\ReservationQueueHandler;
 use App\DTOs\ReservationQueueDTO;
+use App\Models\BookStock;
+use App\Repositories\ReservationQueueRepository;
+use App\Repositories\UserRepository;
 
 class ReservationQueueService extends BasicService
 {
-    protected $handler;
+    protected $reservationQueueHandler;
 
     public function __construct()
     {
-        $this->handler = new ReservationQueueHandler();
+        $this->reservationQueueHandler = new ReservationQueueHandler();
     }
 
-    public function create(ReservationQueueDTO $dto)
+    /**
+     * @throws ErrorJsonException
+     */
+    public function reserveBookQueue(int $userId, int $bookStockId): bool
     {
-        return $this->handler->create($dto);
-    }
+        $reservationQueueRepository = new ReservationQueueRepository();
+        $isWaitingStatusInReservationQueue = $reservationQueueRepository->isWaitingStatusByUserId($userId);
 
-    public function update(ReservationQueueDTO $dto)
-    {
-        return $this->handler->update($dto);
-    }
+        if ($isWaitingStatusInReservationQueue) {
+            throw new ErrorJsonException('This user has a wait reservation queue');
+        }
 
-    public function delete(ReservationQueueDTO $dto)
-    {
-        return $this->handler->delete($dto);
+        $userRepository = new UserRepository();
+        $priority = $userRepository->getPriorityReservationBook($userId);
+
+        $this->reservationQueueHandler->userReserveBookQueue(
+            userId: $userId,
+            bookStockId: $bookStockId,
+            status: EReservationQueueStatus::Waiting,
+            priority: $priority
+        );
+
+        return true;
     }
 }

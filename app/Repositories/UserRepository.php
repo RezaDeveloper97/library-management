@@ -31,4 +31,13 @@ class UserRepository extends BasicRepository
         }
         return config('library-config.user_types.default.count_due_date');
     }
+
+    public function getPriorityReservationBook(int $userId)
+    {
+        $user = $this->query->findById($userId);
+        if ($user?->is_vip) {
+            return config('library-config.user_types.vip.priority_reservation_book');
+        }
+        return config('library-config.user_types.default.priority_reservation_book');
+    }
 }

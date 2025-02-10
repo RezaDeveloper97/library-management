@@ -2,6 +2,7 @@
 
 namespace App\Queries;
 
+use App\Enums\EReservationQueueStatus;
 use App\Models\ReservationQueue;
 
 class ReservationQueueQuery extends BasicQuery
@@ -10,17 +11,19 @@ class ReservationQueueQuery extends BasicQuery
     {
         $model = ReservationQueue::query()->find($id);
 
-        $cachedData = $model->getCacheData();
-
-        if ($cachedData) return $cachedData;
-
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
     public function getAll()
     {
         return ReservationQueue::all();
+    }
+
+    public function isWaitingStatusByUserId(int $userId): bool
+    {
+        return ReservationQueue::query()
+            ->where('user_id', $userId)
+            ->where('status', EReservationQueueStatus::Waiting)
+            ->exists();
     }
 }

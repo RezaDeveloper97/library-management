@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use app\Enums\EReservationStatus;
+use App\Exceptions\ErrorJsonException;
 use App\Handlers\BookStockHandler;
 use App\Handlers\ReservationHandler;
 use App\Models\BookStock;
@@ -18,6 +19,11 @@ class ReservationService extends BasicService
      */
     public function reserveBook(int $userId, BookStock $bookStock): bool
     {
+        if ($bookStock->reserved_copies >= $bookStock->total_copies) {
+            $this->_addToReserveBookQueue($userId, $bookStock->id);
+            return false;
+        }
+
         $bookStockHandler = new BookStockHandler();
         $isReserveBook = $bookStockHandler->reserveBook(
             bookStockId: $bookStock->id,
@@ -27,6 +33,7 @@ class ReservationService extends BasicService
 
         if (!$isReserveBook) {
             // No available book, concurrent !
+            $this->_addToReserveBookQueue($userId, $bookStock->id);
             return false;
         }
 
@@ -42,5 +49,17 @@ class ReservationService extends BasicService
         );
 
         return true;
+    }
+
+    /**
+     * @throws ErrorJsonException
+     */
+    private function _addToReserveBookQueue(int $userId, int $bookStockId): void
+    {
+        $reservationQueueService = new ReservationQueueService();
+        $reservationQueueService->reserveBookQueue(
+            userId: $userId,
+            bookStockId: $bookStockId,
+        );
     }
 }
