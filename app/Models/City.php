@@ -11,6 +11,11 @@ class City extends BaseModel
         'name',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function province(): BelongsTo
     {
         return $this->belongsTo(Province::class);
