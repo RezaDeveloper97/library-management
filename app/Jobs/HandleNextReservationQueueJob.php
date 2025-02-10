@@ -33,6 +33,11 @@ class HandleNextReservationQueueJob implements ShouldQueue
 
                 if ($isReserveBook) {
                     $reservationQueueService->completeReservationQueue($this->reservationQueue->id);
+
+                    $this->reservationQueue->load('user');
+
+                    dispatch(new SendNextReservationNotificationJob($this->reservationQueue->user));
+
                     return true;
                 }
             }
