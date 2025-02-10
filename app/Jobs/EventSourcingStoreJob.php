@@ -19,6 +19,7 @@ class EventSourcingStoreJob implements ShouldQueue
 
     public function __construct(EventSourcingStoreDTO $dto)
     {
+        $this->onQueue('event-sourcing');
         $this->dto = $dto;
     }
 
