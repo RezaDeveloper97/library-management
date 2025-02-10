@@ -12,6 +12,7 @@ class BookStock extends BaseModel
         'branch_id',
         'total_copies',
         'reserved_copies',
+        'lock_version',
     ];
 
     public function book(): BelongsTo

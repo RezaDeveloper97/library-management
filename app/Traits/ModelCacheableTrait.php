@@ -11,7 +11,7 @@ trait ModelCacheableTrait
     {
         $key = $this->getCacheKey();
         $tags = $this->getCacheTags();
-        return CacheHelper::getFromCache($key, $tags);
+        return CacheHelper::getFromCache($tags, $key);
     }
 
     public function setCacheData(): void
