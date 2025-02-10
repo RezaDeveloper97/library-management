@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Queries\BookQuery;
+use Illuminate\Database\Eloquent\Collection;
 
 class BookRepository extends BasicRepository
 {
@@ -21,5 +22,10 @@ class BookRepository extends BasicRepository
     public function all()
     {
         return $this->query->getAll();
+    }
+
+    public function searchByTitle(string $title): Collection
+    {
+        return $this->query->searchByTitle($title);
     }
 }

@@ -25,7 +25,6 @@ Route::middleware('auth:sanctum')
         Route::prefix('book')
             ->group(function () {
                 Route::get('stock/list', [BookController::class, 'listOfBookInStock'])->name('book.stock.list');
-                Route::get('stock/search', [BookController::class, 'listOfBookInStock'])->name('book.stock.search');
 
                 Route::post('reserve', [ReserveBookController::class, 'newReserveBook'])->name('book.reserve.new');
             });

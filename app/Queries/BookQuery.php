@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Book;
+use Illuminate\Database\Eloquent\Collection;
 
 class BookQuery extends BasicQuery
 {
@@ -10,17 +11,16 @@ class BookQuery extends BasicQuery
     {
         $model = Book::query()->find($id);
 
-        $cachedData = $model->getCacheData();
-
-        if ($cachedData) return $cachedData;
-
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
     public function getAll()
     {
         return Book::all();
+    }
+
+    public function searchByTitle(string $title): Collection
+    {
+        return Book::query()->where('title', 'like', '%' . $title . '%')->get();
     }
 }
