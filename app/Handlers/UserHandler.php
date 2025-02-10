@@ -22,40 +22,16 @@ class UserHandler extends BasicHandler
         return $model;
     }
 
-    public function update(UserDTO $dto)
+    public function updateScore(int $userId, int $score)
     {
-        $model = User::query()->find($dto->id);
+        $model = User::query()->find($userId);
+        if ($model) {
+            $model->score += $score;
 
-        if (!is_null($dto->name)) {
-            $model->name = $dto->name;
+            $model->save();
+
+            $model->setCacheData();
         }
-        if (!is_null($dto->email)) {
-            $model->email = $dto->email;
-        }
-        if (!is_null($dto->password)) {
-            $model->password = $dto->password;
-        }
-        if (!is_null($dto->is_vip)) {
-            $model->is_vip = $dto->is_vip;
-        }
-        if (!is_null($dto->score)) {
-            $model->score = $dto->score;
-        }
-
-        $model->save();
-
-        $model->setCacheData();
-
-        return $model;
-    }
-
-    public function delete(UserDTO $dto)
-    {
-        $model = User::query()->find($dto->id);
-
-        $model->clearCache();
-
-        $model->delete();
 
         return $model;
     }

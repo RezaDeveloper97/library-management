@@ -13,6 +13,6 @@ class ScoreLog extends BaseModel
     ];
 
     protected $casts = [
-        'score_change' => EScoreLogReason::class
+        'reason' => EScoreLogReason::class
     ];
 }

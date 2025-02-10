@@ -25,4 +25,9 @@ class UserService extends BasicService
 
         return $this->userHandler->create($userDto);
     }
+
+    public function updateUserScore(int $userId, int $score)
+    {
+        return $this->userHandler->updateScore($userId, $score);
+    }
 }

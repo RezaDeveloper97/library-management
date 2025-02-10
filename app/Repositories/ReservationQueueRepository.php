@@ -29,7 +29,7 @@ class ReservationQueueRepository extends BasicRepository
         return $this->query->isWaitingStatusByUserId($userId);
     }
 
-    public function getHighestPriorityReservation(int $bookStockId): ReservationQueue
+    public function getHighestPriorityReservation(int $bookStockId): ?ReservationQueue
     {
         return $this->query->getHighestPriorityReservation($bookStockId);
     }

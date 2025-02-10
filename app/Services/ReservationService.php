@@ -6,6 +6,7 @@ use app\Enums\EReservationStatus;
 use App\Exceptions\ErrorJsonException;
 use App\Handlers\BookStockHandler;
 use App\Handlers\ReservationHandler;
+use App\Jobs\HandleReturnBookDelayJob;
 use App\Models\BookStock;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
@@ -82,6 +83,8 @@ class ReservationService extends BasicService
                 reservationId: $reservationId,
                 returnedAt: Carbon::now()
             );
+
+            HandleReturnBookDelayJob::dispatch($reservationId);
 
             $this->reservationQueueService->handleNextReservationQueue($bookStock->id);
 

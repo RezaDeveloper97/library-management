@@ -2,30 +2,70 @@
 
 namespace App\Services;
 
+use App\Enums\EScoreLogReason;
 use App\Handlers\ScoreLogHandler;
 use App\DTOs\ScoreLogDTO;
+use App\Models\Reservation;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\DB;
 
 class ScoreLogService extends BasicService
 {
-    protected $handler;
+    protected ScoreLogHandler $scoreLogHandler;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
-        $this->handler = new ScoreLogHandler();
+        $this->scoreLogHandler = new ScoreLogHandler();
+        $this->userRepository = new UserRepository();
     }
 
-    public function create(ScoreLogDTO $dto)
+    public function addScore(int $userId, int $score, EScoreLogReason $reason): bool
     {
-        return $this->handler->create($dto);
+        return DB::transaction(function () use ($userId, $score, $reason) {
+            $this->scoreLogHandler->addScore($userId, $score, $reason);
+
+            $userService = new UserService();
+            $userService->updateUserScore($userId, $score);
+
+            return true;
+        });
     }
 
-    public function update(ScoreLogDTO $dto)
+    public function processReservationReturnScore(Reservation $reservation): void
     {
-        return $this->handler->update($dto);
+        $dueDate = $reservation->due_date->startOfDay();
+        $returnDate = $reservation->returned_at->startOfDay();
+        $diffDays = $returnDate->diffInDays($dueDate);
+
+        if ($diffDays > 0) {
+            $this->processEarlyReturn(userId: $reservation->user_id);
+        } elseif ($diffDays < 0) {
+            $this->processLateReturn(userId: $reservation->user_id, daysLate: $diffDays);
+        }
     }
 
-    public function delete(ScoreLogDTO $dto)
+    private function processEarlyReturn(int $userId): void
     {
-        return $this->handler->delete($dto);
+        $score = $this->userRepository->getPositiveEarlyReservationPoint(userId: $userId);
+
+        $this->addScore(
+            userId: $userId,
+            score: $score,
+            reason: EScoreLogReason::EarlyReturn
+        );
+    }
+
+    public function processLateReturn(int $userId, int $daysLate): void
+    {
+        $baseScore = $this->userRepository->getNegativePerDayLateReservationPoint(userId: $userId);
+
+        $score = $baseScore * abs($daysLate);
+
+        $this->addScore(
+            userId: $userId,
+            score: -$score,
+            reason: EScoreLogReason::LateReturn
+        );
     }
 }

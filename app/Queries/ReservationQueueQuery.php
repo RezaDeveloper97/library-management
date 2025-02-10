@@ -27,7 +27,7 @@ class ReservationQueueQuery extends BasicQuery
             ->exists();
     }
 
-    public function getHighestPriorityReservation(int $bookStockId): ReservationQueue
+    public function getHighestPriorityReservation(int $bookStockId): ?ReservationQueue
     {
         return ReservationQueue::query()
             ->where('book_stock_id', $bookStockId)

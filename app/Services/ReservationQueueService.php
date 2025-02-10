@@ -10,6 +10,7 @@ use App\Jobs\HandleNextReservationQueueJob;
 use App\Models\BookStock;
 use App\Repositories\ReservationQueueRepository;
 use App\Repositories\UserRepository;
+use function PHPUnit\Framework\isNull;
 
 class ReservationQueueService extends BasicService
 {
@@ -51,7 +52,7 @@ class ReservationQueueService extends BasicService
     {
         $nextReservation = $this->reservationQueueRepository->getHighestPriorityReservation($bookStockId);
 
-        if ($nextReservation) {
+        if (!is_null($nextReservation)) {
             HandleNextReservationQueueJob::dispatch($nextReservation);
         }
     }
