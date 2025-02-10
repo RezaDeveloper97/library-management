@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->unsignedInteger('total_copies')->default(1);
             $table->unsignedInteger('reserved_copies')->default(0);
+            $table->unsignedBigInteger('lock_version')->default(0);
             $table->timestamps();
         });
     }

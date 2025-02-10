@@ -9,7 +9,7 @@ class BranchFactory extends Factory
     public function definition()
     {
         return [
-            'city_id' => City::factory(),
+            'city_id' => City::query()->inRandomOrder()->value('id'),
             'name' => $this->faker->company,
             'address' => $this->faker->address,
             'postal_code' => $this->faker->postcode,

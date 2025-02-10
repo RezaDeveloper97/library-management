@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Queries\BranchQuery;
+use Illuminate\Database\Eloquent\Collection;
 
 class BranchRepository extends BasicRepository
 {
@@ -21,5 +22,31 @@ class BranchRepository extends BasicRepository
     public function all()
     {
         return $this->query->getAll();
+    }
+
+    public function getBranchesByProvinceId(int $provinceId): Collection
+    {
+        $locationRepository = new LocationRepository();
+        $cities = $locationRepository->getAllCitiesByProvinceId($provinceId);
+
+        return $this->getBranchesByCitiesId($cities->pluck('id')->toArray());
+    }
+
+    public function getBranchesByProvincesId(array $provincesId): Collection
+    {
+        $locationRepository = new LocationRepository();
+        $cities = $locationRepository->getAllCitiesByProvincesId($provincesId);
+
+        return $this->getBranchesByCitiesId($cities->pluck('id')->toArray());
+    }
+
+    public function getBranchesByCityId(int $cityId): Collection
+    {
+        return $this->query->getBranchesByCityId($cityId);
+    }
+
+    public function getBranchesByCitiesId(array $citiesId): Collection
+    {
+        return $this->query->getBranchesByCitiesId($citiesId);
     }
 }

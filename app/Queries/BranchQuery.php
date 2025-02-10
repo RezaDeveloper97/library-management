@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Branch;
+use Illuminate\Database\Eloquent\Collection;
 
 class BranchQuery extends BasicQuery
 {
@@ -10,17 +11,21 @@ class BranchQuery extends BasicQuery
     {
         $model = Branch::query()->find($id);
 
-        $cachedData = $model->getCacheData();
-
-        if ($cachedData) return $cachedData;
-
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
     public function getAll()
     {
         return Branch::all();
+    }
+
+    public function getBranchesByCityId(int $cityId): Collection
+    {
+        return Branch::query()->where('city_id', $cityId)->get();
+    }
+
+    public function getBranchesByCitiesId(array $citiesId): Collection
+    {
+        return Branch::query()->whereIn('city_id', $citiesId)->get();
     }
 }
