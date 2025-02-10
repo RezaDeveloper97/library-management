@@ -19,12 +19,22 @@ trait ModelCacheableTrait
         $key = $this->getCacheKey();
         $tags = $this->getCacheTags();
 
-        CacheHelper::cacheDataWithTags($key, $this, $tags);
+        CacheHelper::cacheDataWithTags($tags, $key, $this);
     }
 
     public function clearCache(): void
     {
         $tags = $this->getCacheTags();
+
+        CacheHelper::clearCacheByTags($tags);
+    }
+
+    public static function clearCacheById(int $model_id): void
+    {
+        $tags = [
+            Str::plural(strtolower(class_basename(static::class))),
+            strtolower(class_basename(static::class)) . "_{$model_id}"
+        ];
 
         CacheHelper::clearCacheByTags($tags);
     }
