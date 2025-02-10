@@ -15,11 +15,8 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->foreignId('edition_id')->constrained('book_editions')->onDelete('cascade');
-            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
+            $table->foreignId('book_stock_id')->constrained('book_stocks')->onDelete('cascade');
             $table->unsignedTinyInteger('status')->default(EReservationStatus::Active);
-            $table->timestamp('reserved_at')->default(now());
             $table->timestamp('due_date')->nullable();
             $table->timestamp('returned_at')->nullable();
             $table->timestamps();

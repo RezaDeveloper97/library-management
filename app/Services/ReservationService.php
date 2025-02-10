@@ -2,30 +2,45 @@
 
 namespace App\Services;
 
+use app\Enums\EReservationStatus;
+use App\Handlers\BookStockHandler;
 use App\Handlers\ReservationHandler;
-use App\DTOs\ReservationDTO;
+use App\Models\BookStock;
+use App\Repositories\BookStockRepository;
+use App\Repositories\UserRepository;
+use Carbon\Carbon;
+use Exception;
 
 class ReservationService extends BasicService
 {
-    protected $handler;
-
-    public function __construct()
+    /**
+     * @throws Exception
+     */
+    public function reserveBook(int $userId, BookStock $bookStock): bool
     {
-        $this->handler = new ReservationHandler();
-    }
+        $bookStockHandler = new BookStockHandler();
+        $isReserveBook = $bookStockHandler->reserveBook(
+            bookStockId: $bookStock->id,
+            newReservedCopies: $bookStock->reserved_copies + 1,
+            lockVersion: $bookStock->lock_version,
+        );
 
-    public function create(ReservationDTO $dto)
-    {
-        return $this->handler->create($dto);
-    }
+        if (!$isReserveBook) {
+            // No available book, concurrent !
+            return false;
+        }
 
-    public function update(ReservationDTO $dto)
-    {
-        return $this->handler->update($dto);
-    }
+        $userRepository = new UserRepository();
+        $countDay = $userRepository->getCountDueDateReserve($userId);
 
-    public function delete(ReservationDTO $dto)
-    {
-        return $this->handler->delete($dto);
+        $reservationHandler = new ReservationHandler();
+        $reservationHandler->userReserveBook(
+            userId: $userId,
+            bookStockId: $bookStock->id,
+            status: EReservationStatus::Active,
+            dueDate: Carbon::now()->addDays($countDay)
+        );
+
+        return true;
     }
 }
