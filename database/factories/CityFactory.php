@@ -9,7 +9,7 @@ class CityFactory extends Factory
     public function definition()
     {
         return [
-            'province_id' => Province::factory(),
+            'province_id' => Province::query()->inRandomOrder()->value('id'),
             'name' => $this->faker->unique()->city,
         ];
     }

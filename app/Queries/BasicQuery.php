@@ -4,7 +4,7 @@ namespace App\Queries;
 
 abstract class BasicQuery
 {
-    public function getModelData($model)
+    protected function getModelData($model)
     {
         $cachedData = $model?->getCacheData();
 

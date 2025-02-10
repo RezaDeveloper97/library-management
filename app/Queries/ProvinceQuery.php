@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Province;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProvinceQuery extends BasicQuery
 {
@@ -10,17 +11,19 @@ class ProvinceQuery extends BasicQuery
     {
         $model = Province::query()->find($id);
 
-        $cachedData = $model->getCacheData();
-
-        if ($cachedData) return $cachedData;
-
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
-    public function getAll()
+    public function getProvinces(): Collection
     {
         return Province::all();
+    }
+
+    public function getProvincesByName(string $name): Collection
+    {
+        return Province::query()
+            ->where('name', 'LIKE', "%{$name}%")
+            ->orderBy('name')
+            ->get();
     }
 }
