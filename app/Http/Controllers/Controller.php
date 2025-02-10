@@ -34,4 +34,19 @@ abstract class Controller
             status: $status
         );
     }
+
+    public function errorMessage($message, $status = 500): JsonResponse
+    {
+        return $this->errorJson(
+            data: ['message' => $message, 'status' => false],
+            status: $status
+        );
+    }
+
+    public function successMessage($message): JsonResponse
+    {
+        return $this->successJson(
+            data: ['message' => $message, 'status' => true]
+        );
+    }
 }
