@@ -6,7 +6,7 @@ use App\Models\BookStock;
 
 class BookStockHandler extends BasicHandler
 {
-    public function reserveBook(int $bookStockId, int $newReservedCopies, int $lockVersion): bool
+    public function updateReservedCopiesBookStock(int $bookStockId, int $newReservedCopies, int $lockVersion): bool
     {
         $updated = BookStock::query()
             ->where('id', $bookStockId)

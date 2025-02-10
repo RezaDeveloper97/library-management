@@ -27,5 +27,6 @@ Route::middleware('auth:sanctum')
                 Route::get('stock/list', [BookController::class, 'listOfBookInStock'])->name('book.stock.list');
 
                 Route::post('reserve', [ReserveBookController::class, 'newReserveBook'])->name('book.reserve.new');
+                Route::post('reserve/return', [ReserveBookController::class, 'returnReserveBook'])->name('book.reserve.return');
             });
     });

@@ -10,13 +10,7 @@ class ReservationQuery extends BasicQuery
     {
         $model = Reservation::query()->find($id);
 
-        $cachedData = $model->getCacheData();
-
-        if ($cachedData) return $cachedData;
-
-        $model->setCacheData();
-
-        return $model;
+        return $this->getModelData($model);
     }
 
     public function getAll()

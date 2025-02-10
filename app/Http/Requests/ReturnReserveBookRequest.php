@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewReserveBookRequest extends FormRequest
+class ReturnReserveBookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class NewReserveBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'book_stock_id' => 'required|integer|exists:book_stocks,id',
+            'reservation_id' => 'required|integer|exists:reservations,id',
         ];
     }
 }
