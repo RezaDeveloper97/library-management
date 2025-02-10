@@ -23,8 +23,12 @@ class UserRepository extends BasicRepository
         return $this->query->findByEmail($email);
     }
 
-    public function all()
+    public function getCountDueDateReserve(int $userId)
     {
-        return $this->query->getAll();
+        $user = $this->query->findById($userId);
+        if ($user?->is_vip) {
+            return config('library-config.user_types.vip.count_due_date');
+        }
+        return config('library-config.user_types.default.count_due_date');
     }
 }

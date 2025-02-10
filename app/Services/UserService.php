@@ -7,11 +7,11 @@ use App\DTOs\UserDTO;
 
 class UserService extends BasicService
 {
-    protected UserHandler $handler;
+    protected UserHandler $userHandler;
 
     public function __construct()
     {
-        $this->handler = new UserHandler();
+        $this->userHandler = new UserHandler();
     }
 
     public function create(string $name, string $email, string $password)
@@ -23,6 +23,6 @@ class UserService extends BasicService
         $userDto->is_vip = false;
         $userDto->score = 0;
 
-        return $this->handler->create($userDto);
+        return $this->userHandler->create($userDto);
     }
 }

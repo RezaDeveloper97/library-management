@@ -6,7 +6,7 @@ use App\Models\User;
 
 class UserQuery extends BasicQuery
 {
-    public function findById($id)
+    public function findById($id): ?User
     {
         $model = User::query()->find($id);
 
