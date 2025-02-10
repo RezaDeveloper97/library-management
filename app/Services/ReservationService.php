@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\DB;
 class ReservationService extends BasicService
 {
     protected ReservationHandler $reservationHandler;
+    protected ReservationQueueService $reservationQueueService;
 
     public function __construct()
     {
         $this->reservationHandler = new ReservationHandler();
+        $this->reservationQueueService = new ReservationQueueService();
     }
 
     /**
@@ -80,6 +82,8 @@ class ReservationService extends BasicService
                 reservationId: $reservationId,
                 returnedAt: Carbon::now()
             );
+
+            $this->reservationQueueService->handleNextReservationQueue($bookStock->id);
 
             return true;
         });

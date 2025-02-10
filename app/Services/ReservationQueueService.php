@@ -6,17 +6,20 @@ use App\Enums\EReservationQueueStatus;
 use App\Exceptions\ErrorJsonException;
 use App\Handlers\ReservationQueueHandler;
 use App\DTOs\ReservationQueueDTO;
+use App\Jobs\HandleNextReservationQueueJob;
 use App\Models\BookStock;
 use App\Repositories\ReservationQueueRepository;
 use App\Repositories\UserRepository;
 
 class ReservationQueueService extends BasicService
 {
-    protected $reservationQueueHandler;
+    protected ReservationQueueHandler $reservationQueueHandler;
+    protected ReservationQueueRepository $reservationQueueRepository;
 
     public function __construct()
     {
         $this->reservationQueueHandler = new ReservationQueueHandler();
+        $this->reservationQueueRepository = new ReservationQueueRepository();
     }
 
     /**
@@ -42,5 +45,30 @@ class ReservationQueueService extends BasicService
         );
 
         return true;
+    }
+
+    public function handleNextReservationQueue(int $bookStockId): void
+    {
+        $nextReservation = $this->reservationQueueRepository->getHighestPriorityReservation($bookStockId);
+
+        if ($nextReservation) {
+            HandleNextReservationQueueJob::dispatch($nextReservation);
+        }
+    }
+
+    public function completeReservationQueue(int $reservationQueueId): void
+    {
+        $this->reservationQueueHandler->updateStatusReservationQueue(
+            reservationQueueId: $reservationQueueId,
+            status: EReservationQueueStatus::Completed
+        );
+    }
+
+    public function cancelReservationQueue(int $reservationQueueId): void
+    {
+        $this->reservationQueueHandler->updateStatusReservationQueue(
+            reservationQueueId: $reservationQueueId,
+            status: EReservationQueueStatus::Canceled
+        );
     }
 }

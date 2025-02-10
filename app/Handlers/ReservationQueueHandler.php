@@ -22,4 +22,20 @@ class ReservationQueueHandler extends BasicHandler
 
         return $model;
     }
+
+    public function updateStatusReservationQueue(int $reservationQueueId, EReservationQueueStatus $status): bool
+    {
+        $updated = ReservationQueue::query()
+            ->where('id', $reservationQueueId)
+            ->update([
+                'status' => $status,
+            ]);
+
+        if ($updated > 0) {
+            ReservationQueue::clearCacheById($reservationQueueId);
+            return true;
+        }
+
+        return false;
+    }
 }

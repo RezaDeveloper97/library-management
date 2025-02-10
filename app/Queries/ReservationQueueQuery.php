@@ -26,4 +26,14 @@ class ReservationQueueQuery extends BasicQuery
             ->where('status', EReservationQueueStatus::Waiting)
             ->exists();
     }
+
+    public function getHighestPriorityReservation(int $bookStockId): ReservationQueue
+    {
+        return ReservationQueue::query()
+            ->where('book_stock_id', $bookStockId)
+            ->where('status', EReservationQueueStatus::Waiting)
+            ->orderBy('priority', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->first();
+    }
 }
