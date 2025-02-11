@@ -1,6 +1,6 @@
 <?php
 
-use app\Enums\EReservationStatus;
+use App\Enums\EReservationStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

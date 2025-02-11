@@ -2,7 +2,7 @@
 
 namespace App\Handlers;
 
-use app\Enums\EReservationStatus;
+use App\Enums\EReservationStatus;
 use App\Models\Reservation;
 use Carbon\Carbon;
 

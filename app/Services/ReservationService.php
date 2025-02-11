@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use app\Enums\EReservationStatus;
+use App\Enums\EReservationStatus;
 use App\Exceptions\ErrorJsonException;
 use App\Handlers\BookStockHandler;
 use App\Handlers\ReservationHandler;

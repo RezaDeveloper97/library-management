@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use app\Enums\EReservationStatus;
+use App\Enums\EReservationStatus;
 use App\Http\Requests\NewReserveBookRequest;
 use App\Http\Requests\ReturnReserveBookRequest;
 use App\Repositories\BookStockRepository;

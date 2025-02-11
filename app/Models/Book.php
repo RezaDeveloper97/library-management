@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use app\Enums\EReturnPolicy;
+use App\Enums\EReturnPolicy;
 use App\Traits\EventSourcingTrait;
 
 class Book extends BaseModel

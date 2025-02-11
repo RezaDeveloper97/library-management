@@ -1,7 +1,7 @@
 <?php
 namespace Database\Factories;
 
-use app\Enums\EReturnPolicy;
+use App\Enums\EReturnPolicy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Author;
 

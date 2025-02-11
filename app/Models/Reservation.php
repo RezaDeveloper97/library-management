@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use app\Enums\EReservationStatus;
+use App\Enums\EReservationStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reservation extends BaseModel
